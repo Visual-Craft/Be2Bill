@@ -21,58 +21,12 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldImplementActionInterface()
-    {
-        $rc = new \ReflectionClass(CaptureAction::class);
-
-        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
-    }
-
-    /**
-     * @test
-     */
     public function shouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
-
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
-    {
-        $rc = new \ReflectionClass(CaptureAction::class);
-
-        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetApi()
-    {
-        $expectedApi = $this->createApiMock();
-
-        $action = new CaptureAction();
-        $action->setApi($expectedApi);
-
-        $this->assertAttributeSame($expectedApi, 'api', $action);
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
-     */
-    public function throwIfUnsupportedApiGiven()
-    {
-        $action = new CaptureAction();
-
-        $action->setApi(new \stdClass());
-    }
-
 
     /**
      * @test
@@ -84,13 +38,7 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->never())
             ->method('execute');
 
-        $apiMock = $this->createApiMock();
-        $apiMock
-            ->expects($this->never())
-            ->method('payment');
-
         $action = new CaptureAction();
-        $action->setApi($apiMock);
         $action->setGateway($gatewayMock);
 
         $request = new Capture(['EXECCODE' => 1]);
@@ -110,10 +58,7 @@ class CaptureActionTest extends GenericActionTest
             ->method('execute')
             ->with($this->isInstanceOf(ObtainSDDData::class));
 
-        $apiMock = $this->createApiMock();
-
         $action = new CaptureAction();
-        $action->setApi($apiMock);
         $action->setGateway($gatewayMock);
 
         $request = new Capture([
@@ -124,14 +69,6 @@ class CaptureActionTest extends GenericActionTest
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Api
-     */
-    protected function createApiMock()
-    {
-        return $this->createMock(Api::class, array(), array(), '', false);
     }
 
     /**
