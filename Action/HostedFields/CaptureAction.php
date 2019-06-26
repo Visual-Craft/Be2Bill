@@ -21,7 +21,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
     public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
-        $model = new ArrayObject($request->getModel());
+        $model = ArrayObject::ensureArrayObject($request->getModel());
 
         // Already processed
         if ($model['status'] || $model['HFTOKEN']) {
