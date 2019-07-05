@@ -5,8 +5,8 @@ use Payum\Be2Bill\Action\ConvertPaymentAction;
 use Payum\Be2Bill\Action\HostedFields\CaptureAction;
 use Payum\Be2Bill\Action\HostedFields\ExecutePaymentAction;
 use Payum\Be2Bill\Action\HostedFields\ObtainCartTokenAction;
-use Payum\Be2Bill\Action\NotifyAction;
 use Payum\Be2Bill\Action\NotifyNullAction;
+use Payum\Be2Bill\Action\NotifyWithResolveSecretAction;
 use Payum\Be2Bill\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
@@ -31,7 +31,7 @@ class Be2BillHostedFieldsGatewayFactory extends GatewayFactory
             },
             'payum.template.obtain_cart_token' => '@PayumBe2Bill/Action/obtain_cart_token.html.twig',
             'payum.action.notify_null' => new NotifyNullAction(),
-            'payum.action.notify' => new NotifyAction(),
+            'payum.action.notify' => new NotifyWithResolveSecretAction(),
         ]);
 
         $paths = $config['payum.paths'];
