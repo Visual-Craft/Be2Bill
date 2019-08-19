@@ -111,6 +111,16 @@ class Api
 
     const CLIENT_ACCEPT_HEADER = 'application/json';
 
+    const SUSPICIOUSACCOUNTACTIVITY_YES = 'yes';
+
+    const SUSPICIOUSACCOUNTACTIVITY_NO = 'no';
+
+    const CLIENTAUTHMETHOD_CREDENTIALS = 'credentials';
+
+    const CLIENTAUTHMETHOD_GUEST = 'guest';
+
+    const THREEDSECUREPREFERENCE_NO_PREF = 'nopref';
+
     /**
      * @var HttpClientInterface
      */
@@ -182,6 +192,7 @@ class Api
     {
         $this->addCommonParams($params);
         $params['IDENTIFIER'] = $this->resolveIdentifier($cardType);
+        $params['3DSECUREPREFERENCE'] = self::THREEDSECUREPREFERENCE_NO_PREF;
 
         $params['HASH'] = $this->calculateHashForSecret($params, $this->resolveHostedFieldsSecret($cardType));
 

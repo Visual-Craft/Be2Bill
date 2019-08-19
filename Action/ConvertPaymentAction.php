@@ -57,6 +57,38 @@ class ConvertPaymentAction implements ActionInterface
             if ($payment->getShipToPostalCode()) {
                 $details['SHIPTOPOSTALCODE'] = $payment->getShipToPostalCode();
             }
+
+            if ($payment->getPasswordChangeDate()) {
+                $details['PASSWORDCHANGEDATE'] = $payment->getPasswordChangeDate();
+            }
+
+            if ($payment->getLast6MonthsPurchaseCount()) {
+                $details['LAST6MONTHSPURCHASECOUNT'] = $payment->getLast6MonthsPurchaseCount();
+            }
+
+            if ($payment->getLast24HoursTransactionsCount()) {
+                $details['LAST24HOURSTRANSACTIONCOUNT'] = $payment->getLast24HoursTransactionsCount();
+            }
+
+            if ($payment->getSuspiciousAccountActivity()) {
+                $details['SUSPICIOUSACCOUNTACTIVITY'] = $payment->getSuspiciousAccountActivity();
+            }
+
+            if ($payment->getShipToAddressDate()) {
+                $details['SHIPTOADDRESSDATE'] = $payment->getShipToAddressDate();
+            }
+
+            if ($payment->getMobilePhone()) {
+                $details['MOBILEPHONE'] = $payment->getMobilePhone();
+            }
+
+            if ($payment->getReorderingItem()) {
+                $details['REORDERINGITEM'] = $payment->getReorderingItem();
+            }
+
+            if ($payment->getDeliveryEmail()) {
+                $details['DELIVERYEMAIL'] = $payment->getDeliveryEmail();
+            }
         }
 
        $request->setResult((array) $details);
