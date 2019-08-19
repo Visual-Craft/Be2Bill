@@ -215,10 +215,22 @@ class Api
             'DESCRIPTION' => null,
         ];
 
+        $oldParams = $params;
         $params = array_filter(array_replace(
             $supportedParams,
             array_intersect_key($params, $supportedParams)
         ));
+
+        $keys = [
+            'LANGUAGE', 'CLIENTJAVAENABLED', 'CLIENTSCREENCOLORDEPTH',
+            'CLIENTSCREENWIDTH', 'CLIENTSCREENHEIGHT', 'TIMEZONE',
+        ];
+
+        foreach ($keys as $key) {
+            if (isset($oldParams[$key])) {
+                $params[$key] = $oldParams[$key];
+            }
+        }
 
         $this->addCommonParams($params);
         $params['IDENTIFIER'] = $this->options['sdd_identifier'];
