@@ -1,0 +1,32 @@
+<input type="hidden" name="LANGUAGE" class="LANGUAGE">
+<input type="hidden" name="CLIENTJAVAENABLED" class="CLIENTJAVAENABLED">
+<input type="hidden" name="CLIENTSCREENCOLORDEPTH" class="CLIENTSCREENCOLORDEPTH">
+<input type="hidden" name="CLIENTSCREENWIDTH" class="CLIENTSCREENWIDTH">
+<input type="hidden" name="CLIENTSCREENHEIGHT" class="CLIENTSCREENHEIGHT">
+<input type="hidden" name="TIMEZONE" class="TIMEZONE">
+
+<script>
+    window.payumDalenys = {};
+    window.payumDalenys.updateNodes = function updateNodes(selector, value) {
+        var nodes = document.querySelectorAll(selector);
+
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes.hasOwnProperty(i)) {
+                nodes[i].value = value;
+            }
+        }
+    };
+
+    if (navigator) {
+        window.payumDalenys.updateNodes('.CLIENTJAVAENABLED', typeof navigator.javaEnabled === 'function' ? navigator.javaEnabled() ? 'yes' : 'no' : 'no');
+        window.payumDalenys.updateNodes('.LANGUAGE', typeof navigator.language === 'string' ? navigator.language.split('-')[0] : 'en');
+    }
+
+    if (screen) {
+        window.payumDalenys.updateNodes('.CLIENTSCREENCOLORDEPTH', screen.colorDepth);
+        window.payumDalenys.updateNodes('.CLIENTSCREENWIDTH', screen.width);
+        window.payumDalenys.updateNodes('.CLIENTSCREENHEIGHT', screen.height);
+    }
+
+    window.payumDalenys.updateNodes('.TIMEZONE', 'UTC');
+</script>

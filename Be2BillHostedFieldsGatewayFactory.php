@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Be2Bill;
 
-use Payum\Be2Bill\Action\ConvertPaymentAction;
+use Payum\Be2Bill\Action\HostedFields\ConvertPaymentAction;
 use Payum\Be2Bill\Action\HostedFields\CaptureAction;
 use Payum\Be2Bill\Action\HostedFields\ExecutePaymentAction;
 use Payum\Be2Bill\Action\HostedFields\ObtainCartTokenAction;

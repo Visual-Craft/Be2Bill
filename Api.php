@@ -38,6 +38,7 @@ class Api
 
     const EXECCODE_REFERENCE_TRANSACTION_NOT_FOUND = '2004';
 
+
     const EXECCODE_NOT_ABLE_TO_CAPTURE_THE_REFERENCE_AUTHORIZATION = '2005';
 
     const EXECCODE_UNFINISHED_REFERENCE_TRANSACTION = '2006';
@@ -108,6 +109,8 @@ class Api
      */
     const OPERATION_CREDIT = 'credit';
 
+    const CLIENT_ACCEPT_HEADER = 'application/json';
+
     /**
      * @var HttpClientInterface
      */
@@ -177,8 +180,7 @@ class Api
      */
     public function hostedFieldsPayment(array $params, $cardType)
     {
-        $params['OPERATIONTYPE'] = static::OPERATION_PAYMENT;
-        $params['VERSION'] = self::VERSION;
+        $this->addCommonParams($params);
         $params['IDENTIFIER'] = $this->resolveIdentifier($cardType);
 
         $params['HASH'] = $this->calculateHashForSecret($params, $this->resolveHostedFieldsSecret($cardType));
@@ -218,8 +220,7 @@ class Api
             array_intersect_key($params, $supportedParams)
         ));
 
-        $params['OPERATIONTYPE'] = static::OPERATION_PAYMENT;
-        $params['VERSION'] = self::VERSION;
+        $this->addCommonParams($params);
         $params['IDENTIFIER'] = $this->options['sdd_identifier'];
         $params['HASH'] = $this->calculateHashForSecret($params, $this->options['sdd_secret']);
 
@@ -344,6 +345,16 @@ class Api
         $this->addGlobalParams($params);
 
         return $params;
+    }
+
+    /**
+     * @param  array $params
+     */
+    protected function addCommonParams(array &$params)
+    {
+        $params['OPERATIONTYPE'] = static::OPERATION_PAYMENT;
+        $params['VERSION'] = self::VERSION;
+        $params['CLIENTACCEPTHEADER'] = self::CLIENT_ACCEPT_HEADER;
     }
 
     /**
