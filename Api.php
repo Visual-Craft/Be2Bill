@@ -116,10 +116,24 @@ class Api
     const SUSPICIOUSACCOUNTACTIVITY_NO = 'no';
 
     const CLIENTAUTHMETHOD_CREDENTIALS = 'credentials';
-
     const CLIENTAUTHMETHOD_GUEST = 'guest';
+    const CLIENTAUTHMETHOD_FEDERATED = 'federated';
+    const CLIENTAUTHMETHOD_ISSUER = 'issuer';
+    const CLIENTAUTHMETHOD_THIRDPARTY = 'thirdparty';
+    const CLIENTAUTHMETHOD_FIDO = 'fido';
 
     const THREEDSECUREPREFERENCE_NO_PREF = 'nopref';
+
+    const SHIPTOADDRESSTYPE_BILLING = 'billing';
+    const SHIPTOADDRESSTYPE_VERIFIED = 'verified';
+    const SHIPTOADDRESSTYPE_NEW = 'new';
+    const SHIPTOADDRESSTYPE_STORE_PICKUP = 'storepickup';
+    const SHIPTOADDRESSTYPE_EDELIVERY = 'edelivery';
+    const SHIPTOADDRESSTYPE_TRAVELPICKUP = 'travelpickup';
+    const SHIPTOADDRESSTYPE_OTHER = 'other';
+
+    const REORDERINGITEM_YES = 'yes';
+    const REORDERINGITEM_NO = 'no';
 
     /**
      * @var HttpClientInterface

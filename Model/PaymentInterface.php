@@ -84,11 +84,6 @@ interface PaymentInterface extends PayumPaymentInterface
     /**
      * @return string
      */
-    public function getShipToAddressState();
-
-    /**
-     * @return string
-     */
     public function getReorderingItem();
 
     /**

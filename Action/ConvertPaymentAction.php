@@ -50,6 +50,10 @@ class ConvertPaymentAction implements ActionInterface
                 $details['SHIPTOCITY'] = $payment->getShipToCity();
             }
 
+            if ($payment->getShipToCountry()) {
+                $details['SHIPTOCOUNTRY'] = $payment->getShipToCountry();
+            }
+
             if ($payment->getShipToAddress()) {
                 $details['SHIPTOADDRESS'] = $payment->getShipToAddress();
             }
@@ -59,7 +63,7 @@ class ConvertPaymentAction implements ActionInterface
             }
 
             if ($payment->getPasswordChangeDate()) {
-                $details['PASSWORDCHANGEDATE'] = $payment->getPasswordChangeDate();
+                $details['PASSWORDCHANGEDATE'] = $payment->getPasswordChangeDate()->format('Y-m-d');
             }
 
             if ($payment->getLast6MonthsPurchaseCount()) {
@@ -75,7 +79,7 @@ class ConvertPaymentAction implements ActionInterface
             }
 
             if ($payment->getShipToAddressDate()) {
-                $details['SHIPTOADDRESSDATE'] = $payment->getShipToAddressDate();
+                $details['SHIPTOADDRESSDATE'] = $payment->getShipToAddressDate()->format('Y-m-d');
             }
 
             if ($payment->getMobilePhone()) {
@@ -88,6 +92,10 @@ class ConvertPaymentAction implements ActionInterface
 
             if ($payment->getDeliveryEmail()) {
                 $details['DELIVERYEMAIL'] = $payment->getDeliveryEmail();
+            }
+
+            if ($payment->getClientAuthMethod()) {
+                $details['CLIENTAUTHMETHOD'] = $payment->getClientAuthMethod();
             }
         }
 
