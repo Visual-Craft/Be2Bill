@@ -57,6 +57,17 @@ class ObtainCartTokenAction implements ActionInterface, GatewayAwareInterface, A
             $model['CARDFULLNAME'] = $getHttpRequest->request['cardfullname'];
             $model['SELECTEDBRAND'] = $getHttpRequest->request['brand'];
 
+            $keys = [
+                'LANGUAGE', 'CLIENTJAVAENABLED', 'CLIENTSCREENCOLORDEPTH',
+                'CLIENTSCREENWIDTH', 'CLIENTSCREENHEIGHT', 'TIMEZONE'
+            ];
+
+            foreach ($keys as $key) {
+                if ($getHttpRequest->request[$key]) {
+                    $model[$key] = $getHttpRequest->request[$key];
+                }
+            }
+
             /** @var Api $api */
             $api = $this->api;
 

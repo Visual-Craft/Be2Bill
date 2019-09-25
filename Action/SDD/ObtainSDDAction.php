@@ -55,6 +55,17 @@ class ObtainSDDAction implements ActionInterface, GatewayAwareInterface
         ];
 
         if ($getHttpRequest->method === 'POST' && $this->isIssetAllKeys($getHttpRequest->request, $keyNames)) {
+            $keys = [
+                'LANGUAGE', 'CLIENTJAVAENABLED', 'CLIENTSCREENCOLORDEPTH',
+                'CLIENTSCREENWIDTH', 'CLIENTSCREENHEIGHT', 'TIMEZONE',
+            ];
+
+            foreach ($keys as $key) {
+                if ($getHttpRequest->request[$key]) {
+                    $model[$key] = $getHttpRequest->request[$key];
+                }
+            }
+
             $executePayment = new ExecutePayment(
                 $request->getToken(),
                 $getHttpRequest->request['BILLINGFIRSTNAME'],

@@ -38,6 +38,7 @@ class Api
 
     const EXECCODE_REFERENCE_TRANSACTION_NOT_FOUND = '2004';
 
+
     const EXECCODE_NOT_ABLE_TO_CAPTURE_THE_REFERENCE_AUTHORIZATION = '2005';
 
     const EXECCODE_UNFINISHED_REFERENCE_TRANSACTION = '2006';
@@ -108,6 +109,32 @@ class Api
      */
     const OPERATION_CREDIT = 'credit';
 
+    const CLIENT_ACCEPT_HEADER = 'application/json';
+
+    const SUSPICIOUSACCOUNTACTIVITY_YES = 'yes';
+
+    const SUSPICIOUSACCOUNTACTIVITY_NO = 'no';
+
+    const CLIENTAUTHMETHOD_CREDENTIALS = 'credentials';
+    const CLIENTAUTHMETHOD_GUEST = 'guest';
+    const CLIENTAUTHMETHOD_FEDERATED = 'federated';
+    const CLIENTAUTHMETHOD_ISSUER = 'issuer';
+    const CLIENTAUTHMETHOD_THIRDPARTY = 'thirdparty';
+    const CLIENTAUTHMETHOD_FIDO = 'fido';
+
+    const THREEDSECUREPREFERENCE_NO_PREF = 'nopref';
+
+    const SHIPTOADDRESSTYPE_BILLING = 'billing';
+    const SHIPTOADDRESSTYPE_VERIFIED = 'verified';
+    const SHIPTOADDRESSTYPE_NEW = 'new';
+    const SHIPTOADDRESSTYPE_STORE_PICKUP = 'storepickup';
+    const SHIPTOADDRESSTYPE_EDELIVERY = 'edelivery';
+    const SHIPTOADDRESSTYPE_TRAVELPICKUP = 'travelpickup';
+    const SHIPTOADDRESSTYPE_OTHER = 'other';
+
+    const REORDERINGITEM_YES = 'yes';
+    const REORDERINGITEM_NO = 'no';
+
     /**
      * @var HttpClientInterface
      */
@@ -177,9 +204,9 @@ class Api
      */
     public function hostedFieldsPayment(array $params, $cardType)
     {
-        $params['OPERATIONTYPE'] = static::OPERATION_PAYMENT;
-        $params['VERSION'] = self::VERSION;
+        $this->addCommonParams($params);
         $params['IDENTIFIER'] = $this->resolveIdentifier($cardType);
+        $params['3DSECUREPREFERENCE'] = self::THREEDSECUREPREFERENCE_NO_PREF;
 
         $params['HASH'] = $this->calculateHashForSecret($params, $this->resolveHostedFieldsSecret($cardType));
 
@@ -213,13 +240,24 @@ class Api
             'DESCRIPTION' => null,
         ];
 
+        $oldParams = $params;
         $params = array_filter(array_replace(
             $supportedParams,
             array_intersect_key($params, $supportedParams)
         ));
 
-        $params['OPERATIONTYPE'] = static::OPERATION_PAYMENT;
-        $params['VERSION'] = self::VERSION;
+        $keys = [
+            'LANGUAGE', 'CLIENTJAVAENABLED', 'CLIENTSCREENCOLORDEPTH',
+            'CLIENTSCREENWIDTH', 'CLIENTSCREENHEIGHT', 'TIMEZONE',
+        ];
+
+        foreach ($keys as $key) {
+            if (isset($oldParams[$key])) {
+                $params[$key] = $oldParams[$key];
+            }
+        }
+
+        $this->addCommonParams($params);
         $params['IDENTIFIER'] = $this->options['sdd_identifier'];
         $params['HASH'] = $this->calculateHashForSecret($params, $this->options['sdd_secret']);
 
@@ -344,6 +382,16 @@ class Api
         $this->addGlobalParams($params);
 
         return $params;
+    }
+
+    /**
+     * @param  array $params
+     */
+    protected function addCommonParams(array &$params)
+    {
+        $params['OPERATIONTYPE'] = static::OPERATION_PAYMENT;
+        $params['VERSION'] = self::VERSION;
+        $params['CLIENTACCEPTHEADER'] = self::CLIENT_ACCEPT_HEADER;
     }
 
     /**
