@@ -445,32 +445,6 @@ class Api
 
     /**
      * @param array $requestData
-     * @return Callback
-     */
-    public function parseCallbackRequest(array $requestData)
-    {
-        $hash = $requestData['HASH'];
-        $orderId = $requestData['ORDERID'];
-        $transactionId = $requestData['TRANSACTIONID'];
-        $execCode = $requestData['EXECCODE'];
-        $message = $requestData['MESSAGE'];
-
-        if (!$hash || !$orderId || !$transactionId || !$execCode) {
-            throw new \InvalidArgumentException('Missed required Request data field');
-        }
-
-        unset($requestData['HASH']);
-        $secret = $this->resolveSecretByIdentifier($requestData['IDENTIFIER']);
-
-        if ($this->calculateHashForSecret($requestData, $secret) !== $hash) {
-            throw new \InvalidArgumentException('Corrupted Data');
-        }
-
-        return new Callback($execCode, $orderId, $transactionId, $message);
-    }
-
-    /**
-     * @param array $requestData
      * @return ReturnFromPaymentSystem
      */
     public function parseReturnFromPaymentSystemRequest(array $requestData)
@@ -572,5 +546,26 @@ class Api
         }
 
         return $this->options['secret'];
+    }
+
+    /**
+     * Verify if the hash of the given parameter is correct
+     *
+     * @param array $params
+     *
+     * @return bool
+     */
+    public function verifyHashWithIdentifier(array $params)
+    {
+        if (empty($params['IDENTIFIER']) ||empty($params['HASH'])) {
+            return false;
+        }
+
+        $hash = $params['HASH'];
+        unset($params['HASH']);
+
+        $secret = $this->resolveSecretByIdentifier($params['IDENTIFIER']);
+
+        return $hash === $this->calculateHashForSecret($params, $secret);
     }
 }

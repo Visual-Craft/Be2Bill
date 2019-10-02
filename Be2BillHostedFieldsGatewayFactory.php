@@ -5,6 +5,8 @@ use Payum\Be2Bill\Action\HostedFields\ConvertPaymentAction;
 use Payum\Be2Bill\Action\HostedFields\CaptureAction;
 use Payum\Be2Bill\Action\HostedFields\ExecutePaymentAction;
 use Payum\Be2Bill\Action\HostedFields\ObtainCartTokenAction;
+use Payum\Be2Bill\Action\NotifyNullAction;
+use Payum\Be2Bill\Action\NotifyWithResolveSecretAction;
 use Payum\Be2Bill\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
@@ -28,6 +30,8 @@ class Be2BillHostedFieldsGatewayFactory extends GatewayFactory
                 return new ObtainCartTokenAction($config['payum.template.obtain_cart_token']);
             },
             'payum.template.obtain_cart_token' => '@PayumBe2Bill/Action/obtain_cart_token.html.twig',
+            'payum.action.notify_null' => new NotifyNullAction(),
+            'payum.action.notify' => new NotifyWithResolveSecretAction(),
         ]);
 
         $paths = $config['payum.paths'];
@@ -50,7 +54,14 @@ class Be2BillHostedFieldsGatewayFactory extends GatewayFactory
             ];
 
             $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = ['identifier', 'password'];
+            $config['payum.required_options'] = [
+                'identifier',
+                'password',
+                'apikeyid',
+                'secret',
+                'amex_identifier',
+                'amex_secret',
+            ];
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
