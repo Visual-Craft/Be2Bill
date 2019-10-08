@@ -135,6 +135,9 @@ class Api
     const REORDERINGITEM_YES = 'yes';
     const REORDERINGITEM_NO = 'no';
 
+    const ALIASMODE_ONECLICK  = 'oneclick';
+    const ALIASMODE_SUBSCRIPTION  = 'subscription';
+
     /**
      * @var HttpClientInterface
      */
@@ -500,7 +503,8 @@ class Api
             isset($requestData['3DSECUREAUTHENTICATIONSTATUS']) ? $requestData['3DSECUREAUTHENTICATIONSTATUS'] : '',
             isset($requestData['3DSECURESIGNATURESTATUS']) ? $requestData['3DSECURESIGNATURESTATUS'] : '',
             isset($requestData['3DSGLOBALSTATUS']) ? $requestData['3DSGLOBALSTATUS'] : '',
-            isset($requestData['CARD3DSECUREENROLLED']) ? $requestData['CARD3DSECUREENROLLED'] : ''
+            isset($requestData['CARD3DSECUREENROLLED']) ? $requestData['CARD3DSECUREENROLLED'] : '',
+            isset($requestData['ALIAS']) ? $requestData['ALIAS'] : ''
         );
     }
 

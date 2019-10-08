@@ -5,6 +5,7 @@ use Payum\Be2Bill\Action\SDD\ConvertPaymentAction;
 use Payum\Be2Bill\Action\SDD\CaptureAction;
 use Payum\Be2Bill\Action\SDD\ExecutePaymentAction;
 use Payum\Be2Bill\Action\SDD\ObtainSDDAction;
+use Payum\Be2Bill\Action\SDD\RecurringPaymentAction;
 use Payum\Be2Bill\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
@@ -24,6 +25,7 @@ class Be2BillSDDGatewayFactory extends GatewayFactory
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
             'payum.action.execute_payment' => new ExecutePaymentAction(),
+            'payum.action.recurring_payment' => new RecurringPaymentAction(),
             'payum.action.obtain_sdd_data' => function (ArrayObject $config) {
                 return new ObtainSDDAction($config['payum.template.obtain_sdd_data']);
             },
