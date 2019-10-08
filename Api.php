@@ -483,7 +483,6 @@ class Api
         $transactionId = $requestData['TRANSACTIONID'];
         $execCode = $requestData['EXECCODE'];
         $message = $requestData['MESSAGE'];
-        $api = $requestData['ALIAS'];
 
         if (!$hash || !$orderId || !$transactionId || !$execCode) {
             throw new \InvalidArgumentException('Missed required Request data field');

@@ -47,7 +47,7 @@ class ReturnFromPaymentSystem
     private $secureEnrollStatus;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $alias;
 
@@ -157,7 +157,7 @@ class ReturnFromPaymentSystem
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getAlias()
     {

@@ -43,7 +43,7 @@ class RecurringPaymentAction implements ActionInterface, ApiAwareInterface, Gate
         $model->validateNotEmpty(['ALIAS', 'ALIASMODE']);
 
         if ($model['HFTOKEN']) {
-            throw new \LogicException('The token has already been set.');
+            throw new \LogicException('The token has already been set. Misusing of RecurringPaymentAction');
         }
 
         if (!$model['CLIENTUSERAGENT']) {
@@ -79,8 +79,9 @@ class RecurringPaymentAction implements ActionInterface, ApiAwareInterface, Gate
     public function supports($request)
     {
         return
-            $request instanceof RecurringPayment &&
+            $request instanceof RecurringPayment
+                &&
             $request->getModel() instanceof \ArrayAccess
-            ;
+        ;
     }
 }
