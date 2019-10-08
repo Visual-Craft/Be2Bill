@@ -49,7 +49,7 @@ class RecurringPaymentAction implements ActionInterface, ApiAwareInterface, Gate
             $model['CLIENTIP'] = $httpRequest->clientIp;
         }
 
-        $model['BILLINGFIRSTNAME']  = $request->getFirstName();
+        $model['BILLINGFIRSTNAME'] = $request->getFirstName();
         $model['BILLINGLASTNAME'] = $request->getLastName();
         $model['BILLINGADDRESS'] = $request->getAddress();
         $model['BILLINGCITY'] = $request->getCity();

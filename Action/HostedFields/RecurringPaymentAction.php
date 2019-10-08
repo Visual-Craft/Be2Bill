@@ -38,6 +38,7 @@ class RecurringPaymentAction implements ActionInterface, ApiAwareInterface, Gate
 
         $model['ALIAS'] = $request->getAlias();
         $model['ALIASMODE'] = $request->getAliasMode();
+        $model['CARDFULLNAME'] = $request->getFullName();
 
         $model->validateNotEmpty(['ALIAS', 'ALIASMODE']);
 
@@ -55,22 +56,15 @@ class RecurringPaymentAction implements ActionInterface, ApiAwareInterface, Gate
             $model['CLIENTIP'] = $httpRequest->clientIp;
         }
 
-        $newModel = new ArrayObject();
-        $newModel['IDENTIFIER']=$model['IDENTIFIER'];
-        $newModel['ORDERID']=$model['ORDERID'];
-        $newModel['ALIAS']= $model['ALIAS'];
-        $newModel['ALIASMODE']=$model['ALIASMODE'];
-        $newModel['AMOUNT']=$model['AMOUNT'];
-        $newModel['CLIENTIDENT']=$model['CLIENTIDENT'];
-        $newModel['CLIENTEMAIL']= $model['CLIENTEMAIL'];
-        $newModel['CLIENTUSERAGENT']=$model['CLIENTUSERAGENT'];
-        $newModel['CLIENTIP']=$model['CLIENTIP'];
-        $newModel['CARDFULLNAME']= $request->getFullName();
-        $newModel['DESCRIPTION']= $model['DESCRIPTION'];
-
         /** @var Api $api */
         $api = $this->api;
-        $result = $api->hostedFieldsPayment($newModel->toUnsafeArray(), $request->getCardType());
+
+        if ($api->getIsForce3dSecure()) {
+            $model['3DSECUREDISPLAYMODE'] = 'main';
+            $model['3DSECURE'] = true;
+        }
+
+        $result = $api->hostedFieldsPayment($model->toUnsafeArray(), $request->getCardType());
 
         if ($result->EXECCODE === Api::EXECCODE_3DSECURE_IDENTIFICATION_REQUIRED) {
             throw new HttpResponse(base64_decode($result->{'3DSECUREHTML'}));
