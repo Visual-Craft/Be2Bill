@@ -36,11 +36,7 @@ class RecurringPaymentAction implements ActionInterface, ApiAwareInterface, Gate
         /** @var RecurringPayment $request */
         $model = new ArrayObject($request->getModel());
 
-        $model['ALIAS'] = $request->getAlias();
-        $model['ALIASMODE'] = $request->getAliasMode();
-        $model['CARDFULLNAME'] = $request->getFullName();
-
-        $model->validateNotEmpty(['ALIAS', 'ALIASMODE']);
+        $model->validateNotEmpty(['ALIAS', 'ALIASMODE', 'CARDFULLNAME', 'CARDTYPE']);
 
         if ($model['HFTOKEN']) {
             throw new \LogicException('The token has already been set. Misusing of RecurringPaymentAction');
@@ -64,7 +60,7 @@ class RecurringPaymentAction implements ActionInterface, ApiAwareInterface, Gate
             $model['3DSECURE'] = true;
         }
 
-        $result = $api->hostedFieldsPayment($model->toUnsafeArray(), $request->getCardType());
+        $result = $api->hostedFieldsPayment($model->toUnsafeArray(), $model['CARDTYPE']);
 
         if ($result->EXECCODE === Api::EXECCODE_3DSECURE_IDENTIFICATION_REQUIRED) {
             throw new HttpResponse(base64_decode($result->{'3DSECUREHTML'}));
