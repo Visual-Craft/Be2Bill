@@ -2,7 +2,7 @@
 
 namespace Payum\Be2Bill\Action\SDD;
 
-use Payum\Be2Bill\Request\SDD\RecurringPayment;
+use Payum\Be2Bill\Request\Api\RecurringPayment;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -36,8 +36,18 @@ class RecurringPaymentAction implements ActionInterface, ApiAwareInterface, Gate
         /** @var RecurringPayment $request */
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model['ALIAS'] = $request->getAlias();
-        $model->validateNotEmpty(['ALIAS']);
+        $model->validateNotEmpty([
+            'ALIAS',
+            'BILLINGFIRSTNAME',
+            'BILLINGLASTNAME',
+            'BILLINGADDRESS',
+            'BILLINGCITY',
+            'BILLINGCOUNTRY',
+            'BILLINGMOBILEPHONE',
+            'BILLINGPOSTALCODE',
+            'CLIENTGENDER',
+            'CLIENTEMAIL'
+        ]);
 
         if (!$model['CLIENTUSERAGENT']) {
             $this->gateway->execute($httpRequest = new GetHttpRequest());
@@ -49,15 +59,6 @@ class RecurringPaymentAction implements ActionInterface, ApiAwareInterface, Gate
             $model['CLIENTIP'] = $httpRequest->clientIp;
         }
 
-        $model['BILLINGFIRSTNAME'] = $request->getFirstName();
-        $model['BILLINGLASTNAME'] = $request->getLastName();
-        $model['BILLINGADDRESS'] = $request->getAddress();
-        $model['BILLINGCITY'] = $request->getCity();
-        $model['BILLINGCOUNTRY'] = $request->getCountry();
-        $model['BILLINGMOBILEPHONE'] = $request->getPhone();
-        $model['BILLINGPOSTALCODE'] = $request->getPostalCode();
-        $model['CLIENTGENDER'] = $request->getClientGender();
-        $model['CLIENTEMAIL'] = $request->getEmail();
         /** @var Api $api */
         $api = $this->api;
         $result = $api->sddPayment($model->toUnsafeArray());

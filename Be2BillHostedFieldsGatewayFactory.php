@@ -6,6 +6,7 @@ use Payum\Be2Bill\Action\HostedFields\CaptureAction;
 use Payum\Be2Bill\Action\HostedFields\ExecutePaymentAction;
 use Payum\Be2Bill\Action\HostedFields\ObtainCartTokenAction;
 use Payum\Be2Bill\Action\HostedFields\RecurringPaymentAction;
+use Payum\Be2Bill\Action\HostedFields\RenderTemplateAction;
 use Payum\Be2Bill\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
@@ -26,8 +27,9 @@ class Be2BillHostedFieldsGatewayFactory extends GatewayFactory
             'payum.action.convert_payment' => new ConvertPaymentAction(),
             'payum.action.execute_payment' => new ExecutePaymentAction(),
             'payum.action.recurring_payment' => new RecurringPaymentAction(),
-            'payum.action.obtain_cart_token' => function (ArrayObject $config) {
-                return new ObtainCartTokenAction($config['payum.template.obtain_cart_token']);
+            'payum.action.obtain_cart_token' => new ObtainCartTokenAction(),
+            'payum.action.render_obtain_cart_token' => function (ArrayObject $config) {
+                return new RenderTemplateAction($config['payum.template.obtain_cart_token']);
             },
             'payum.template.obtain_cart_token' => '@PayumBe2Bill/Action/obtain_cart_token.html.twig',
         ]);
