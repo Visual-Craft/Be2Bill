@@ -28,7 +28,7 @@ class Be2BillSDDGatewayFactory extends GatewayFactory
             'payum.action.execute_payment' => new ExecutePaymentAction(),
             'payum.action.recurring_payment' => new RecurringPaymentAction(),
             'payum.action.obtain_sdd_data' => new ObtainSDDAction(),
-            'payum.action.render_obtain_sdd_data' => function (ArrayObject $config) {
+            'payum.action.render_obtain_cart_token' => function (ArrayObject $config) {
                 return new RenderTemplateAction($config['payum.template.obtain_sdd_data']);
             },
             'payum.template.obtain_sdd_data' => '@PayumBe2Bill/Action/SDD/obtain_sdd_data.html.twig',

@@ -28,7 +28,7 @@ class Be2BillHostedFieldsGatewayFactory extends GatewayFactory
             'payum.action.execute_payment' => new ExecutePaymentAction(),
             'payum.action.recurring_payment' => new RecurringPaymentAction(),
             'payum.action.obtain_cart_token' => new ObtainCartTokenAction(),
-            'payum.action.render_obtain_data' => function (ArrayObject $config) {
+            'payum.action.render_obtain_cart_token' => function (ArrayObject $config) {
                 return new RenderTemplateAction($config['payum.template.obtain_cart_token']);
             },
             'payum.template.obtain_cart_token' => '@PayumBe2Bill/Action/obtain_cart_token.html.twig',
