@@ -61,6 +61,9 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         }
 
         $renderObtainCardToken = new RenderObtainCardToken($request->getToken());
+        // set firstModel data to request->model/firstModel
+        $renderObtainCardToken->setModel($request->getFirstModel());
+        // update request->model from firstModel data to model data
         $renderObtainCardToken->setModel($model);
         $this->gateway->execute($renderObtainCardToken);
     }
