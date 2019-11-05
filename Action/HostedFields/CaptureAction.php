@@ -35,7 +35,6 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
     {
         RequestNotSupportedException::assertSupports($this, $request);
         $model = new ArrayObject($request->getModel());
-        $firstModel = new ArrayObject($request->getFirstModel());
 
         // Already processed
         if ($model['status'] || $model['HFTOKEN']) {
@@ -64,7 +63,9 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         }
 
         $renderObtainCardToken = new RenderObtainCardToken($request->getToken());
-        $renderObtainCardToken->setModel($firstModel);
+        // set firstModel data to request->model/firstModel
+        $renderObtainCardToken->setModel($request->getFirstModel());
+        // update request->model from firstModel data to model data
         $renderObtainCardToken->setModel($model);
         $this->gateway->execute($renderObtainCardToken);
     }

@@ -35,7 +35,6 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
     {
         RequestNotSupportedException::assertSupports($this, $request);
         $model = new ArrayObject($request->getModel());
-        $firstModel = new ArrayObject($request->getFirstModel());
 
         // Already processed
         if ($model['EXECCODE']) {
@@ -62,7 +61,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         }
 
         $renderObtainCardToken = new RenderObtainCardToken($request->getToken());
-        $renderObtainCardToken->setModel($firstModel);
+        $renderObtainCardToken->setModel($request->getFirstModel());
         $renderObtainCardToken->setModel($model);
         $this->gateway->execute($renderObtainCardToken);
     }
