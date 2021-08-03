@@ -38,12 +38,12 @@ class ConvertPaymentAction extends CommonConvertPaymentAction
                 $details['ACCOUNTCREATIONDATE'] = $payment->getAccountCreationDate()->format('Y-m-d');
             }
 
-            if ($payment->getBillingState()) {
-                $details['BILLINGSTATE'] = $payment->getBillingState();
-            }
-
             if ($payment->getDeliveryTimeFrame()) {
                 $details['DELIVERYTIMEFRAME'] = $payment->getDeliveryTimeFrame();
+            }
+
+            if ($payment->getBillingState()) {
+                $details['BILLINGSTATE'] = $payment->getBillingState();
             }
 
             if ($payment->getShipToState()) {

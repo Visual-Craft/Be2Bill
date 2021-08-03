@@ -127,7 +127,7 @@ interface PaymentInterface extends PayumPaymentInterface
     public function getBillingState();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDeliveryTimeFrame();
 

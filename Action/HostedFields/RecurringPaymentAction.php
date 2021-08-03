@@ -63,7 +63,7 @@ class RecurringPaymentAction implements ActionInterface, ApiAwareInterface, Gate
         $result = $api->hostedFieldsPayment($model->toUnsafeArray(), $model['CARDTYPE']);
 
         if ($result->EXECCODE === Api::EXECCODE_3DSECURE_IDENTIFICATION_REQUIRED) {
-            throw new HttpResponse(base64_decode($result->{'REDIRECTHML'}));
+            throw new HttpResponse(base64_decode($result->{'REDIRECTHTML'}));
         }
 
         $model->replace((array) $result);
