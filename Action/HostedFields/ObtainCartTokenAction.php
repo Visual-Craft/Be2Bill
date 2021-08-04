@@ -63,7 +63,7 @@ class ObtainCartTokenAction implements ActionInterface, GatewayAwareInterface, A
             ];
 
             foreach ($keys as $key) {
-                if ($getHttpRequest->request[$key]) {
+                if (isset($getHttpRequest->request[$key]) && $getHttpRequest->request[$key]) {
                     $model[$key] = $getHttpRequest->request[$key];
                 }
             }

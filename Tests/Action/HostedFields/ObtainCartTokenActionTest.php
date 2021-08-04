@@ -20,7 +20,7 @@ class ObtainCartTokenActionTest extends GenericActionTest
 
     protected $requestClass = ObtainCartToken::class;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->action = new ObtainCartTokenAction('template');
     }
@@ -30,23 +30,19 @@ class ObtainCartTokenActionTest extends GenericActionTest
         //overwrite
     }
 
-    public function provideSupportedRequests()
+    public function provideSupportedRequests(): \Iterator
     {
-        return array(
-            array(new $this->requestClass(new \ArrayObject())),
-        );
+        yield array(new $this->requestClass(new \ArrayObject()));
     }
 
-    public function provideNotSupportedRequests()
+    public function provideNotSupportedRequests(): \Iterator
     {
-        return array(
-            array('foo'),
-            array(array('foo')),
-            array(new \stdClass()),
-            array(new $this->requestClass('foo')),
-            array(new $this->requestClass(new \stdClass())),
-            array($this->getMockForAbstractClass(Generic::class, array(array()))),
-        );
+        yield array('foo');
+        yield array(array('foo'));
+        yield array(new \stdClass());
+        yield array(new $this->requestClass('foo'));
+        yield array(new $this->requestClass(new \stdClass()));
+        yield array($this->getMockForAbstractClass(Generic::class, array(array())));
     }
 
     /**
