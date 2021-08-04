@@ -47,6 +47,11 @@ class ReturnFromPaymentSystem
     private $secureEnrollStatus;
 
     /**
+     * @var string|null
+     */
+    private $alias;
+
+    /**
      * @param string $execCode
      * @param string $paymentNumber
      * @param string $transactionId
@@ -55,6 +60,7 @@ class ReturnFromPaymentSystem
      * @param string $secureSignatureStatus
      * @param string $secureGlobalStatus
      * @param string $secureEnrollStatus
+     * @param string $alias
      */
     public function __construct(
         $execCode,
@@ -64,7 +70,8 @@ class ReturnFromPaymentSystem
         $secureStatus,
         $secureSignatureStatus,
         $secureGlobalStatus,
-        $secureEnrollStatus
+        $secureEnrollStatus,
+        $alias
     ) {
         $this->execCode = $execCode;
         $this->paymentNumber = $paymentNumber;
@@ -74,6 +81,7 @@ class ReturnFromPaymentSystem
         $this->secureSignatureStatus = $secureSignatureStatus;
         $this->secureGlobalStatus = $secureGlobalStatus;
         $this->secureEnrollStatus = $secureEnrollStatus;
+        $this->alias = $alias;
     }
 
     /**
@@ -146,5 +154,13 @@ class ReturnFromPaymentSystem
     public function isSuccessful()
     {
          return ($this->execCode === Api::EXECCODE_SUCCESSFUL) || ($this->execCode === Api::EXECCODE_SDD_PENDING_PROCESSING);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAlias()
+    {
+        return $this->alias;
     }
 }

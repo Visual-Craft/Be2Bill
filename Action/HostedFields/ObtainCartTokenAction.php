@@ -11,27 +11,16 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Request\RenderTemplate;
 use Payum\Be2Bill\Request\Api\ObtainCartToken;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Reply\HttpResponse;
 
 class ObtainCartTokenAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
     use ApiAwareTrait;
     use GatewayAwareTrait;
 
-    /**
-     * @var string
-     */
-    private $template;
-
-    /**
-     * @param string $template
-     */
-    public function __construct($template)
+    public function __construct()
     {
-        $this->template = $template;
         $this->apiClass = Api::class;
     }
 
@@ -83,23 +72,7 @@ class ObtainCartTokenAction implements ActionInterface, GatewayAwareInterface, A
             );
             $executePayment->setModel($model);
             $this->gateway->execute($executePayment);
-
-            return;
         }
-
-        /** @var Api $api */
-        $api = $this->api;
-        $token = $request->getToken();
-        $this->gateway->execute($renderTemplate = new RenderTemplate($this->template, [
-            'credentials' => $api->getObtainJsTokenCredentials(),
-            'actionUrl' => $token ? $token->getTargetUrl() : null,
-            'hostedFieldsJsLibUrl' => $api->getHostedFieldsJsLibUrl(),
-            'brandDetectorJsLibUrl' => $api->getBrandDetectorJsLibUrl(),
-            'token' => $token,
-            'amount' => $model['AMOUNT'] / 100,
-        ]));
-
-        throw new HttpResponse($renderTemplate->getResult());
     }
 
     /**

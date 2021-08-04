@@ -6,31 +6,19 @@ use Payum\Be2Bill\Api;
 use Payum\Be2Bill\Request\SDD\ObtainSDDData;
 use Payum\Be2Bill\Request\SDD\ExecutePayment;
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\ApiAwareInterface;
-use Payum\Core\ApiAwareTrait;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Request\RenderTemplate;
-use Payum\Core\Reply\HttpResponse;
 
 class ObtainSDDAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * @var string
-     */
-    private $template;
-
-    /**
-     * @param string $template
-     */
-    public function __construct($template)
+    public function __construct()
     {
-        $this->template = $template;
+        $this->apiClass = Api::class;
     }
 
     /**
@@ -79,18 +67,7 @@ class ObtainSDDAction implements ActionInterface, GatewayAwareInterface
             );
             $executePayment->setModel($model);
             $this->gateway->execute($executePayment);
-
-            return;
         }
-
-        $token = $request->getToken();
-        $this->gateway->execute($renderTemplate = new RenderTemplate($this->template, [
-            'actionUrl' => $token ? $token->getTargetUrl() : null,
-            'token' => $token,
-            'amount' => $model['AMOUNT'] / 100,
-        ]));
-
-        throw new HttpResponse($renderTemplate->getResult());
     }
 
     /**

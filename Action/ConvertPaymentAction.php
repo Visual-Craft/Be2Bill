@@ -97,6 +97,18 @@ class ConvertPaymentAction implements ActionInterface
             if ($payment->getClientAuthMethod()) {
                 $details['CLIENTAUTHMETHOD'] = $payment->getClientAuthMethod();
             }
+
+            if ($payment->getAlias()) {
+                $details['ALIAS'] = $payment->getAlias();
+            }
+
+            if ($payment->getCreateAlias() !== null) {
+                $details['CREATEALIAS'] = $payment->getCreateAlias();
+            }
+
+            if ($payment->getAliasMode()) {
+                $details['ALIASMODE'] = $payment->getAliasMode();
+            }
         }
 
        $request->setResult((array) $details);

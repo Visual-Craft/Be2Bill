@@ -2,6 +2,8 @@
 
 namespace Payum\Be2Bill\Action\HostedFields;
 
+use Payum\Be2Bill\Request\Api\RecurringPayment;
+use Payum\Be2Bill\Request\RenderObtainCardToken;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayAwareInterface;
@@ -9,6 +11,7 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Be2Bill\Request\Api\ObtainCartToken;
+use Payum\Core\Request\GetHttpRequest;
 
 class CaptureAction implements ActionInterface, GatewayAwareInterface
 {
@@ -28,10 +31,33 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
             return;
         }
 
-        // Should obtain cart token
-        $obtainToken = new ObtainCartToken($request->getToken());
-        $obtainToken->setModel($model);
-        $this->gateway->execute($obtainToken);
+        $getHttpRequest = new GetHttpRequest();
+        $this->gateway->execute($getHttpRequest);
+
+        if ($getHttpRequest->method === 'POST') {
+
+            if ($model['ALIAS']) {
+                $paymentRequest = new RecurringPayment($request->getToken());
+                $paymentRequest->setModel($model);
+                $this->gateway->execute($paymentRequest);
+
+                return;
+            }
+
+            // Should obtain cart token
+            $obtainToken = new ObtainCartToken($request->getToken());
+            $obtainToken->setModel($model);
+            $this->gateway->execute($obtainToken);
+
+            return;
+        }
+
+        $renderObtainCardToken = new RenderObtainCardToken($request->getToken());
+        // set firstModel data to request->model/firstModel
+        $renderObtainCardToken->setModel($request->getFirstModel());
+        // update request->model from firstModel data to model data
+        $renderObtainCardToken->setModel($model);
+        $this->gateway->execute($renderObtainCardToken);
     }
 
     /**

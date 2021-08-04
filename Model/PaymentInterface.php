@@ -95,4 +95,19 @@ interface PaymentInterface extends PayumPaymentInterface
      * @return string
      */
     public function getDeliveryEmail();
+
+    /**
+     * @return string|null
+     */
+    public function getAlias();
+
+    /**
+     * @return string|null
+     */
+    public function getAliasMode();
+
+    /**
+     * @return bool|null
+     */
+    public function getCreateAlias();
 }
