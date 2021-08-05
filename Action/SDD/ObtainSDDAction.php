@@ -2,7 +2,6 @@
 
 namespace Payum\Be2Bill\Action\SDD;
 
-use Payum\Be2Bill\Api;
 use Payum\Be2Bill\Request\SDD\ObtainSDDData;
 use Payum\Be2Bill\Request\SDD\ExecutePayment;
 use Payum\Core\Action\ActionInterface;
@@ -15,11 +14,6 @@ use Payum\Core\Request\GetHttpRequest;
 class ObtainSDDAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
-
-    public function __construct()
-    {
-        $this->apiClass = Api::class;
-    }
 
     /**
      * @param mixed $request
