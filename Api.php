@@ -138,6 +138,11 @@ class Api
     const ALIASMODE_ONECLICK  = 'oneclick';
     const ALIASMODE_SUBSCRIPTION  = 'subscription';
 
+    const DELIVERYTIMEFRAME_ELECTRONIC  = 'electronic';
+    const DELIVERYTIMEFRAME_SAMEDAY  = 'sameday';
+    const DELIVERYTIMEFRAME_OVERNIGHT  = 'overnight';
+    const DELIVERYTIMEFRAME_LONGER  = 'longer';
+
     /**
      * @var HttpClientInterface
      */

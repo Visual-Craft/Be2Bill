@@ -350,7 +350,7 @@ class CaptureActionTest extends GenericActionTest
 
         $this->expectException(HttpResponse::class);
         $action->execute($status = new Capture([
-            '3DSECUREHTML' => base64_encode('<html>foo</html>'),
+            'REDIRECTHTML' => base64_encode('<html>foo</html>'),
             'EXECCODE' => Api::EXECCODE_3DSECURE_IDENTIFICATION_REQUIRED,
         ]));
     }

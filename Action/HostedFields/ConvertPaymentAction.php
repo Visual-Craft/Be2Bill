@@ -29,6 +29,26 @@ class ConvertPaymentAction extends CommonConvertPaymentAction
             if ($payment->getShipToAddressType()) {
                 $details['SHIPTOADDRESSTYPE'] = $payment->getShipToAddressType();
             }
+
+            if ($payment->getAccountChangeDate()) {
+                $details['ACCOUNTCHANGEDATE'] = $payment->getAccountChangeDate()->format('Y-m-d');
+            }
+
+            if ($payment->getAccountCreationDate()) {
+                $details['ACCOUNTCREATIONDATE'] = $payment->getAccountCreationDate()->format('Y-m-d');
+            }
+
+            if ($payment->getDeliveryTimeFrame()) {
+                $details['DELIVERYTIMEFRAME'] = $payment->getDeliveryTimeFrame();
+            }
+
+            if ($payment->getBillingState()) {
+                $details['BILLINGSTATE'] = $payment->getBillingState();
+            }
+
+            if ($payment->getShipToState()) {
+                $details['SHIPTOSTATE'] = $payment->getShipToState();
+            }
         }
 
         $request->setResult((array) $details);

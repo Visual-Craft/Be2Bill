@@ -54,7 +54,7 @@ class ExecutePaymentAction implements ActionInterface, ApiAwareInterface, Gatewa
         $result = $api->hostedFieldsPayment($model->toUnsafeArray(), $request->getCardType());
 
         if ($result->EXECCODE === Api::EXECCODE_3DSECURE_IDENTIFICATION_REQUIRED) {
-            throw new HttpResponse(base64_decode($result->{'3DSECUREHTML'}));
+            throw new HttpResponse(base64_decode($result->{'REDIRECTHTML'}));
         }
 
         $model->replace((array) $result);

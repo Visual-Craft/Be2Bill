@@ -110,4 +110,29 @@ interface PaymentInterface extends PayumPaymentInterface
      * @return bool|null
      */
     public function getCreateAlias();
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getAccountChangeDate();
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getAccountCreationDate();
+
+    /**
+     * @return string|null
+     */
+    public function getBillingState();
+
+    /**
+     * @return string|null
+     */
+    public function getDeliveryTimeFrame();
+
+    /**
+     * @return string|null
+     */
+    public function getShipToState();
 }
