@@ -96,6 +96,21 @@ class Payment extends PayumPayment implements PaymentInterface
     protected $deliveryEmail;
 
     /**
+     * @var string|null
+     */
+    protected $alias;
+
+    /**
+     * @var string|null
+     */
+    protected $aliasMode;
+
+    /**
+     * @var bool|null
+     */
+    protected $createAlias;
+
+    /**
      * @return string
      */
     public function getBillingCity()
@@ -237,5 +252,29 @@ class Payment extends PayumPayment implements PaymentInterface
     public function getDeliveryEmail()
     {
         return $this->deliveryEmail;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAliasMode()
+    {
+        return $this->aliasMode;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getCreateAlias()
+    {
+        return $this->createAlias;
     }
 }
