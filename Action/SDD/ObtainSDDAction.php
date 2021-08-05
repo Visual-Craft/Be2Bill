@@ -2,27 +2,18 @@
 
 namespace Payum\Be2Bill\Action\SDD;
 
-use Payum\Be2Bill\Api;
 use Payum\Be2Bill\Request\SDD\ObtainSDDData;
 use Payum\Be2Bill\Request\SDD\ExecutePayment;
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\ApiAwareInterface;
-use Payum\Core\ApiAwareTrait;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\GetHttpRequest;
 
-class ObtainSDDAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
+class ObtainSDDAction implements ActionInterface, GatewayAwareInterface
 {
-    use ApiAwareTrait;
     use GatewayAwareTrait;
-
-    public function __construct()
-    {
-        $this->apiClass = Api::class;
-    }
 
     /**
      * @param mixed $request
@@ -42,7 +33,7 @@ class ObtainSDDAction implements ActionInterface, GatewayAwareInterface, ApiAwar
         $this->gateway->execute($getHttpRequest);
         $keyNames = [
             'BILLINGFIRSTNAME', 'BILLINGLASTNAME', 'BILLINGADDRESS',
-            'BILLINGCITY', 'BILLINGCOUNTRY', 'BILLINGMOBILEPHONE', 'BILLINGPOSTALCODE',
+            'BILLINGCITY', 'BILLINGCOUNTRY', 'BILLINGMOBILEPHONE', 'BILLINGPOSTALCODE','CLIENTGENDER'
         ];
 
         if ($getHttpRequest->method === 'POST' && $this->isIssetAllKeys($getHttpRequest->request, $keyNames)) {
@@ -52,7 +43,7 @@ class ObtainSDDAction implements ActionInterface, GatewayAwareInterface, ApiAwar
             ];
 
             foreach ($keys as $key) {
-                if ($getHttpRequest->request[$key]) {
+                if (isset($getHttpRequest->request[$key]) && $getHttpRequest->request[$key]) {
                     $model[$key] = $getHttpRequest->request[$key];
                 }
             }

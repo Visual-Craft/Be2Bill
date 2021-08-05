@@ -6,25 +6,16 @@ use Payum\Be2Bill\Request\Api\RecurringPayment;
 use Payum\Be2Bill\Request\RenderObtainCardToken;
 use Payum\Be2Bill\Request\SDD\ObtainSDDData;
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\ApiAwareInterface;
-use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Be2Bill\Api;
 use Payum\Core\Request\GetHttpRequest;
 
-class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
+class CaptureAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
-    use ApiAwareTrait;
-
-    public function __construct()
-    {
-        $this->apiClass = Api::class;
-    }
 
     /**
      * {@inheritDoc}

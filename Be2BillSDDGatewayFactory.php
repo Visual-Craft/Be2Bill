@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Be2Bill;
 
+use Payum\Be2Bill\Action\NotifyAction;
+use Payum\Be2Bill\Action\NotifyNullAction;
 use Payum\Be2Bill\Action\SDD\ConvertPaymentAction;
 use Payum\Be2Bill\Action\SDD\CaptureAction;
 use Payum\Be2Bill\Action\SDD\ExecutePaymentAction;
@@ -32,6 +34,8 @@ class Be2BillSDDGatewayFactory extends GatewayFactory
                 return new RenderTemplateAction($config['payum.template.obtain_sdd_data']);
             },
             'payum.template.obtain_sdd_data' => '@PayumBe2Bill/Action/SDD/obtain_sdd_data.html.twig',
+            'payum.action.notify_null' => new NotifyNullAction(),
+            'payum.action.notify' => new NotifyAction(),
         ]);
 
         $paths = $config['payum.paths'];
@@ -51,7 +55,7 @@ class Be2BillSDDGatewayFactory extends GatewayFactory
             ];
 
             $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = ['identifier', 'password'];
+            $config['payum.required_options'] = ['sdd_identifier', 'password', 'apikeyid', 'sdd_secret'];
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);

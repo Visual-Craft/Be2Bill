@@ -1,11 +1,16 @@
 <?php
-namespace Payum\Be2bill\Tests\Action;
 
-use Payum\Be2Bill\Action\ConvertPaymentAction;
+namespace Payum\Be2Bill\Tests\Action\SDD;
+
+use Payum\Be2Bill\Action\SDD\ConvertPaymentAction;
+use Payum\Be2Bill\Model\GenderAwarePaymentInterface;
 use Payum\Be2Bill\Model\Payment;
 use Payum\Be2Bill\Model\PaymentInterface;
+//use Payum\Core\Model\Payment;
+//use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use Payum\Core\Tests\GenericActionTest;
+//use Payum\Be2Bill\Model\PaymentInterface as SDDPaymentInterface;
 
 class ConvertPaymentActionTest extends GenericActionTest
 {
@@ -17,6 +22,7 @@ class ConvertPaymentActionTest extends GenericActionTest
     {
         yield array(new $this->requestClass(new Payment(), 'array'));
         yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'array'));
+        yield array(new $this->requestClass($this->createMock(SDDPaymentInterface::class), 'array'));
         yield array(new $this->requestClass(new Payment(), 'array', $this->createMock('Payum\Core\Security\TokenInterface')));
     }
 
@@ -29,12 +35,13 @@ class ConvertPaymentActionTest extends GenericActionTest
         yield array(new $this->requestClass(new \stdClass(), 'array'));
         yield array(new $this->requestClass(new Payment(), 'foobar'));
         yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar'));
+        yield array(new $this->requestClass($this->createMock(SDDPaymentInterface::class), 'foobar'));
     }
 
     /**
      * @test
      */
-    public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function shouldCorrectlyConvertPaymentToDetailsAndSetItBack()
     {
         $payment = new Payment();
         $payment->setNumber('theNumber');
@@ -46,7 +53,11 @@ class ConvertPaymentActionTest extends GenericActionTest
 
         $action = new ConvertPaymentAction();
 
-        $action->execute($convert = new Convert($payment, 'array'));
+        $convert = new Convert($payment, 'array');
+        //guard
+        $this->assertTrue($action->supports($convert));
+
+        $action->execute($convert);
 
         $details = $convert->getResult();
 
@@ -92,4 +103,54 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertArrayHasKey('foo', $details);
         $this->assertEquals('fooVal', $details['foo']);
     }
+
+    /**
+     * @test
+     */
+    public function shouldCorrectlyConvertCustomPaymentToDetailsAndSetItBack()
+    {
+        $ssdPayment = $this->createMock(SDDPaymentInterface::class);
+        $ssdPayment->method('getNumber')->willReturn('theNumber');
+        $ssdPayment->method('getCurrencyCode')->willReturn('USD');
+        $ssdPayment->method('getTotalAmount')->willReturn(123);
+        $ssdPayment->method('getDescription')->willReturn('the description');
+        $ssdPayment->method('getClientId')->willReturn('theClientId');
+        $ssdPayment->method('getClientEmail')->willReturn('theClientEmail');
+        $ssdPayment->method('getClientGender')->willReturn('theClientGender');
+        $ssdPayment->method('getDetails')->willReturn([]);
+
+        $action = new ConvertPaymentAction();
+
+        $convert = new Convert($ssdPayment, 'array');
+        //guard
+        $this->assertTrue($action->supports($convert));
+
+        $action->execute($convert);
+
+        $details = $convert->getResult();
+
+        $this->assertNotEmpty($details);
+
+        $this->assertArrayHasKey('AMOUNT', $details);
+        $this->assertEquals(123, $details['AMOUNT']);
+
+        $this->assertArrayHasKey('ORDERID', $details);
+        $this->assertEquals('theNumber', $details['ORDERID']);
+
+        $this->assertArrayHasKey('DESCRIPTION', $details);
+        $this->assertEquals('the description', $details['DESCRIPTION']);
+
+        $this->assertArrayHasKey('CLIENTIDENT', $details);
+        $this->assertEquals('theClientId', $details['CLIENTIDENT']);
+
+        $this->assertArrayHasKey('CLIENTEMAIL', $details);
+        $this->assertEquals('theClientEmail', $details['CLIENTEMAIL']);
+
+        $this->assertArrayHasKey('CLIENTGENDER', $details);
+        $this->assertEquals('theClientGender', $details['CLIENTGENDER']);
+    }
+}
+
+interface SDDPaymentInterface extends PaymentInterface, GenderAwarePaymentInterface
+{
 }
