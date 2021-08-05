@@ -4,9 +4,12 @@ namespace Payum\Be2Bill\Tests\Action\HostedFields;
 
 use Payum\Be2Bill\Action\HostedFields\CaptureAction;
 use Payum\Be2Bill\Request\Api\ObtainCartToken;
+use Payum\Be2Bill\Request\Api\RecurringPayment;
+use Payum\Be2Bill\Request\RenderObtainCardToken;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Model\Token;
 use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Tests\GenericActionTest;
 
 class CaptureActionTest extends GenericActionTest
@@ -51,18 +54,62 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldBeCalledExecuteObtainCartToken()
+    public function shouldBeCallExecuteRecurringPayment()
     {
-        $token = new Token();
-        $request = new Capture($token);
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->at(0))
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
+            ->willReturnCallback(
+                static function (GetHttpRequest $request) {
+                    $request->method = 'POST';
+                }
+            )
+        ;
+
+        $gatewayMock
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->isInstanceOf(RecurringPayment::class));
+
+        $action = new CaptureAction();
+        $action->setGateway($gatewayMock);
+
+        $request = new Capture(new Token());
         $request->setModel([
             'AMOUNT' => 10,
             'status' => null,
             'HFTOKEN' => null,
+            'ALIAS' => 'alias',
         ]);
+
+        //guard
+        $this->assertTrue($action->supports($request));
+
+        $action->execute($request);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldBeCallExecuteObtainCartToken()
+    {
+        $token = new Token();
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->once())
+            ->expects($this->at(0))
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
+            ->willReturnCallback(
+                static function (GetHttpRequest $request) {
+                    $request->method = 'POST';
+                }
+            )
+        ;
+
+        $gatewayMock
+            ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(ObtainCartToken::class))
             ->willReturnCallback(function (ObtainCartToken $request) use ($token) {
@@ -80,7 +127,50 @@ class CaptureActionTest extends GenericActionTest
         $action = new CaptureAction();
         $action->setGateway($gatewayMock);
 
+        $request = new Capture($token);
+        $request->setModel([
+            'AMOUNT' => 10,
+            'status' => null,
+            'HFTOKEN' => null,
+        ]);
 
+        //guard
+        $this->assertTrue($action->supports($request));
+
+        $action->execute($request);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnRenderTemplateResponseIfMethodNotPost()
+    {
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->at(0))
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
+            ->willReturnCallback(
+                static function (GetHttpRequest $request) {
+                    $request->method = 'GET';
+                }
+            )
+        ;
+
+        $gatewayMock
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->isInstanceOf(RenderObtainCardToken::class));
+
+        $action = new CaptureAction();
+        $action->setGateway($gatewayMock);
+
+        $request = new Capture(new Token());
+        $request->setModel([
+            'AMOUNT' => 10,
+            'status' => null,
+            'HFTOKEN' => null,
+        ]);
 
         //guard
         $this->assertTrue($action->supports($request));
