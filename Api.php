@@ -337,8 +337,8 @@ class Api
     public function getHostedFieldsJsLibUrl()
     {
         return $this->options['sandbox'] ?
-            'https://js.sandbox.dalenys.com/hosted-fields/v1/hosted-fields.min.js' :
-            'https://js.dalenys.com/hosted-fields/v1/hosted-fields.min.js'
+            'https://js.sandbox.dalenys.com/hosted-fields/v2.2.0/hosted-fields.min.js' :
+            'https://js.dalenys.com/hosted-fields/v2.2.0/hosted-fields.min.js'
         ;
     }
 
@@ -348,8 +348,8 @@ class Api
     public function getBrandDetectorJsLibUrl()
     {
         return $this->options['sandbox'] ?
-            'https://js.sandbox.dalenys.com/brand-detector/v1/brand-detector.min.js' :
-            'https://js.dalenys.com/brand-detector/v1/brand-detector.min.js'
+            'https://js.sandbox.dalenys.com/brand-detector/v2.2.0/brand-detector.min.js' :
+            'https://js.dalenys.com/brand-detector/v2.2.0/brand-detector.min.js'
         ;
     }
 
