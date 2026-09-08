@@ -326,8 +326,8 @@ class Api
     public function getOffsiteUrl()
     {
         return $this->options['sandbox'] ?
-            'https://secure-test.be2bill.com/front/form/process.php' :
-            'https://secure-magenta1.be2bill.com/front/form/process.php'
+            'https://secure-test.dalenys.com/front/form/process' :
+            'https://secure-magenta.dalenys.com/front/form/process'
         ;
     }
 
@@ -417,8 +417,8 @@ class Api
     protected function getApiEndpoint()
     {
         return $this->options['sandbox'] ?
-            'https://secure-test.be2bill.com/front/service/rest/process' :
-            'https://secure-magenta1.be2bill.com/front/service/rest/process'
+            'https://secure-test.dalenys.com/front/service/rest/process' :
+            'https://secure-magenta.dalenys.com/front/service/rest/process'
         ;
     }
 
